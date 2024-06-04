@@ -1,0 +1,11 @@
+
+debug/*
+release/*
+test_package/build/*
+releaseLinux/*
+debugLinux/*
+/.vscode/
+release32/*
+Debug32/*
+*CMakeUserPresets.json
+build*

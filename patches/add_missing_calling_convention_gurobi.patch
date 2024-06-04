@@ -1,0 +1,13 @@
+diff --git a/ortools/math_opt/solvers/gurobi/g_gurobi.cc b/ortools/math_opt/solvers/gurobi/g_gurobi.cc
+index 51fb1b8450..9eee7a85c2 100644
+--- a/ortools/math_opt/solvers/gurobi/g_gurobi.cc
++++ b/ortools/math_opt/solvers/gurobi/g_gurobi.cc
+@@ -43,7 +43,7 @@ struct UserCallbackData {
+   Gurobi* gurobi = nullptr;
+ };
+ 
+-int GurobiCallback(GRBmodel* const model, void* const cbdata, const int where,
++int GUROBI_STDCALL GurobiCallback(GRBmodel* const model, void* const cbdata, const int where,
+                    void* const usrdata) {
+   CHECK(usrdata != nullptr);
+   CHECK(model != nullptr);

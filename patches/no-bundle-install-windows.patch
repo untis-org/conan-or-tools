@@ -1,0 +1,13 @@
+diff --git a/cmake/cpp.cmake b/cmake/cpp.cmake
+index 9cd60d87e4..44f8bfc5e0 100644
+--- a/cmake/cpp.cmake
++++ b/cmake/cpp.cmake
+@@ -486,7 +486,7 @@ if(USE_SCIP)
+     COMPONENT Devel)
+ endif()
+ 
+-if(MSVC)
++if(FALSE)
+ # Bundle lib for MSVC
+ configure_file(
+ ${PROJECT_SOURCE_DIR}/cmake/bundle-install.cmake.in

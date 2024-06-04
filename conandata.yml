@@ -1,0 +1,7 @@
+patches:
+- patch_file: "patches/no-bundle-install-windows.patch"
+  patch_description: Avoids the unnecessary installation of a bundled lib of ortools that fails on windows.
+- patch_file: "patches/add_missing_calling_convention_gurobi.patch"
+  patch_description: Add the missing calling convention __stdcall to GurobiCallback, see https://github.com/google/or-tools/issues/4175
+- patch_file: "patches/scip_relwithdebinfo.patch"
+  patch_description: "Fixes the build of SCIP in RelWithDebInfo mode."

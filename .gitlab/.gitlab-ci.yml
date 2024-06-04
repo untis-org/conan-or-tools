@@ -1,0 +1,63 @@
+workflow:
+  auto_cancel:
+    on_job_failure: all # will abort as soon as any job fails
+
+stages:
+  - build
+
+.build:
+  stage: build
+  variables:
+    CONAN_BUILD_PROFILE: linux/release64.profile
+    CONAN_REVISIONS_ENABLED: 1
+  script:
+    - conan config set general.revisions_enabled=1
+    - conan remote add <ARTIFACTORY_REMOTE_NAME> <ARTIFACTORY_URL> -i 0 -f
+    - conan user -p $CI_JFROG_PASSWORD -r <ARTIFACTORY_REMOTE_NAME> $CI_JFROG_USER
+    - git submodule update --init --recursive --depth 1
+    - conan remove --locks
+    - conan remove "*" -f
+    - conan create . --build=missing -pr ./conan-profiles/$CONAN_BUILD_PROFILE --json package.json
+    - conan upload "*" -r=opt-conan-dev-local --all --confirm --parallel --retry 2
+  rules:
+    - if: "$BUILD_DISABLED"
+      when: never
+    - if: $CI_COMMIT_TAG
+      when: always
+    - when: never
+
+.build_linux:
+  extends: .build
+  before_script:
+    - git config --global --add safe.directory $(pwd)
+
+.build_windows:
+  extends: .build
+  before_script:
+    - write-output $CONAN_USER_HOME
+
+build_lin_release_64:
+  extends: .build_linux
+  variables:
+    CONAN_BUILD_PROFILE: linux/release64.profile
+    CONAN_USER_HOME: "$CI_PROJECT_DIR"
+
+build_win_release_64:
+  extends: .build_windows
+  variables:
+    CONAN_BUILD_PROFILE: windows/release64.profile
+
+build_win_release_32:
+  extends: .build_windows
+  variables:
+    CONAN_BUILD_PROFILE: windows/release32.profile
+
+build_win_debug_64:
+  extends: .build_windows
+  variables:
+    CONAN_BUILD_PROFILE: windows/debug64.profile
+
+build_win_debug_32:
+  extends: .build_windows
+  variables:
+    CONAN_BUILD_PROFILE: windows/debug32.profile
